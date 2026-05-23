@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -31,6 +32,9 @@ public class Order {
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItem;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

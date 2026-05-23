@@ -1,5 +1,6 @@
 package bd.com.shahjabir.creatorstudio.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -37,6 +39,8 @@ public class Product {
     @Min(value = 0, message = "Stock cannot be less than 0")
     @Column(name = "stock_quantity",nullable = false)
     private Integer stockQuantity;
-}
 
-// TODO: relation
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+}
