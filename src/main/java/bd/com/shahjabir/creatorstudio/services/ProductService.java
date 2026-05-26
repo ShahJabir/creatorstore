@@ -4,6 +4,9 @@ import bd.com.shahjabir.creatorstudio.entities.Product;
 import bd.com.shahjabir.creatorstudio.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class ProductService {
 
     public Product updateProduct(Long id, Product product) {
         Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Product not found with id " + id));
         existingProduct.setName(product.getName());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setCategory(product.getCategory());
@@ -36,10 +39,13 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Product not found with id " + id));
     }
 
     public void deleteProduct( Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResponseStatusException(NOT_FOUND, "Product not found with id " + id);
+        }
         productRepository.deleteById(id);
     }
 
